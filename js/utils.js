@@ -1,0 +1,36 @@
+function rectangularCollision({ rectangle1, rectanlge2 }) {
+    return (
+        rectangle1.attackBox.position.x + rectangle1.attackBox.width >= rectanlge2.position.x
+        && rectangle1.attackBox.position.x <= rectanlge2.position.x + rectanlge2.width
+        && rectangle1.attackBox.position.y + rectangle1.attackBox.height >= rectanlge2.position.y
+        && rectangle1.attackBox.position.y <= rectanlge2.position.y + rectanlge2.height
+    )
+
+}
+
+function determineWinner({ player, enemy, timerId }) {
+    clearTimeout(timerId)
+    document.querySelector('#displayResult').style.display = 'flex'
+    if (player.health === enemy.health) {
+        console.log('tie')
+        document.querySelector('#displayResult').innerHTML = 'Tie'
+    } else if (player.health > enemy.health) {
+        document.querySelector('#displayResult').innerHTML = 'Player 1 Wins'
+    } else if (player.health < enemy.health) {
+        document.querySelector('#displayResult').innerHTML = 'Player 2 Wins'
+    }
+}
+
+
+let timer = 60;
+let timerId;
+function decreaseTimer() {
+    if (timer > 0) {
+        timerId = setTimeout(decreaseTimer, 1000)
+        timer--
+        document.querySelector('#timer').innerHTML = timer
+    }
+    if (timer === 0) {
+        determineWinner({ player, enemy, timerId })
+    }
+}
