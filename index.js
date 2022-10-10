@@ -121,7 +121,37 @@ function rectangularCollision({ rectangle1, rectanlge2 }) {
     && rectangle1.attackBox.position.y + rectangle1.attackBox.height >= rectanlge2.position.y
     && rectangle1.attackBox.position.y <= rectanlge2.position.y + rectanlge2.height
   )
+
 }
+
+function determinWinner({ player, enemy, timerId }) {
+  clearTimeout(timerId)
+  document.querySelector('#displayResult').style.display = 'flex'
+  if (player.health === enemy.health) {
+    console.log('tie')
+    document.querySelector('#displayResult').innerHTML = 'Tie'
+  } else if (player.health > enemy.health) {
+    document.querySelector('#displayResult').innerHTML = 'Player 1 Wins'
+  } else if (player.health < enemy.health) {
+    document.querySelector('#displayResult').innerHTML = 'Player 2 Wins'
+  }
+}
+
+
+let timer = 60;
+let timerId;
+function decreaseTimer() {
+  if (timer > 0) {
+    timerId = setTimeout(decreaseTimer, 1000)
+    timer--
+    document.querySelector('#timer').innerHTML = timer
+  }
+  if (timer === 0) {
+    determinWinner({ player, enemy, timerId })
+  }
+}
+
+decreaseTimer();
 
 function animatePlayers() {
   window.requestAnimationFrame(animatePlayers);
@@ -156,6 +186,12 @@ function animatePlayers() {
     enemy.isAttacking = false;
     player.health -= 20;
     document.querySelector('#playerHealth').style.width = player.health + '%';
+  }
+
+  //End game based on health
+  if (enemy.health <= 0 || player.health <= 0) {
+    determinWinner({ player, enemy, timerId })
+
   }
 }
 
