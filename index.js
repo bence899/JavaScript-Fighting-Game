@@ -11,23 +11,20 @@ const gravity = 0.7;
 const background = new Sprite({
   position: {
     x: 0,
-    y: 0
+    y: 0,
   },
-  imageSrc: './img/background.png'
-
+  imageSrc: "./img/background.png",
 });
 
 const shop = new Sprite({
   position: {
     x: 600,
-    y: 128
+    y: 128,
   },
-  imageSrc: './img/shop.png',
+  imageSrc: "./img/shop.png",
   scale: 2.75,
-  framesMax: 6
-
+  framesMax: 6,
 });
-
 
 const player = new Fighter({
   position: {
@@ -41,7 +38,36 @@ const player = new Fighter({
   offset: {
     x: 0,
     y: 0,
-  }
+  },
+  imageSrc: "./img/samuraiMack/Idle.png",
+  framesMax: 8,
+  scale: 2.5,
+  offset: {
+    x: 215,
+    y: 157,
+  },
+  sprites: {
+    idle: {
+      imageSrc: "./img/samuraiMack/Idle.png",
+      framesMax: 8,
+    },
+    run: {
+      imageSrc: "./img/samuraiMack/Run.png",
+      framesMax: 8,
+    },
+    jump: {
+      imageSrc: "./img/samuraiMack/Jump.png",
+      framesMax: 2,
+    },
+    fall: {
+      imageSrc: "./img/samuraiMack/Fall.png",
+      framesMax: 2,
+    },
+    attack1: {
+      imageSrc: "./img/samuraiMack/Attack1.png",
+      framesMax: 6,
+    },
+  },
 });
 
 const enemy = new Fighter({
@@ -53,11 +79,40 @@ const enemy = new Fighter({
     x: 0,
     y: 0,
   },
-  color: 'blue',
+  color: "blue",
   offset: {
     x: -50,
     y: 0,
-  }
+  },
+  imageSrc: "./img/kenji/Idle.png",
+  framesMax: 4,
+  scale: 2.5,
+  offset: {
+    x: 215,
+    y: 167,
+  },
+  sprites: {
+    idle: {
+      imageSrc: "./img/kenji/Idle.png",
+      framesMax: 4,
+    },
+    run: {
+      imageSrc: "./img/kenji/Run.png",
+      framesMax: 8,
+    },
+    jump: {
+      imageSrc: "./img/kenji/Jump.png",
+      framesMax: 2,
+    },
+    fall: {
+      imageSrc: "./img/kenji/Fall.png",
+      framesMax: 2,
+    },
+    attack1: {
+      imageSrc: "./img/kenji/Attack1.png",
+      framesMax: 4,
+    },
+  },
 });
 
 const keys = {
@@ -91,33 +146,59 @@ function animateGame() {
   //Player Movement
   if (keys.a.pressed && player.lastkey === "a") {
     player.velocity.x = -5;
+    player.switchSprites("run");
   } else if (keys.d.pressed && player.lastkey === "d") {
     player.velocity.x = 5;
+    player.switchSprites("run");
+  } else {
+    player.switchSprites("idle");
+  }
+  //Player Jumping
+  if (player.velocity.y < 0) {
+    player.switchSprites("jump");
+  } else if (player.velocity.y > 0) {
+    player.switchSprites("fall");
   }
 
   //Enemy Movement
   if (keys.ArrowLeft.pressed && enemy.lastKey === "ArrowLeft") {
     enemy.velocity.x = -5;
+    enemy.switchSprites("run");
   } else if (keys.ArrowRight.pressed && enemy.lastKey === "ArrowRight") {
     enemy.velocity.x = 5;
+    enemy.switchSprites("run");
+  } else {
+    enemy.switchSprites("idle");
+  }
+
+  //Enemy Jumping
+  if (enemy.velocity.y < 0) {
+    enemy.switchSprites("jump");
+  } else if (enemy.velocity.y > 0) {
+    enemy.switchSprites("fall");
   }
 
   //detect for collision
-  if (rectangularCollision({ rectangle1: player, rectanlge2: enemy }) && player.isAttacking) {
+  if (
+    rectangularCollision({ rectangle1: player, rectanlge2: enemy }) &&
+    player.isAttacking
+  ) {
     player.isAttacking = false;
     enemy.health -= 20;
-    document.querySelector('#enemyHealth').style.width = enemy.health + '%';
+    document.querySelector("#enemyHealth").style.width = enemy.health + "%";
   }
-  if (rectangularCollision({ rectangle1: enemy, rectanlge2: player }) && enemy.isAttacking) {
+  if (
+    rectangularCollision({ rectangle1: enemy, rectanlge2: player }) &&
+    enemy.isAttacking
+  ) {
     enemy.isAttacking = false;
     player.health -= 20;
-    document.querySelector('#playerHealth').style.width = player.health + '%';
+    document.querySelector("#playerHealth").style.width = player.health + "%";
   }
 
   //End game based on health
   if (enemy.health <= 0 || player.health <= 0) {
-    determineWinner({ player, enemy, timerId })
-
+    determineWinner({ player, enemy, timerId });
   }
 }
 
@@ -180,5 +261,4 @@ window.addEventListener("keyup", (event) => {
       keys.ArrowLeft.pressed = false;
       break;
   }
-
 });
