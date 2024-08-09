@@ -1,7 +1,7 @@
 # **2D Fighting Game**
 
 ## **Overview**
-This is a 2D fighting game built using **JavaScript**, **HTML5 Canvas**, and **CSS** animation library. The game features two fighters, each with their own set of animations, health bars, and attack mechanics. The objective is to reduce your opponent's health to zero or have more health remaining when the timer runs out.
+This is a 2D fighting game built using **JavaScript**, **HTML5 Canvas**, and **CSS**. The game features two fighters, each with their own set of animations, health bars, and attack mechanics. The objective is to reduce your opponent's health to zero or have more health remaining when the timer runs out.
 
 ## **Features**
 
@@ -58,9 +58,6 @@ This is a 2D fighting game built using **JavaScript**, **HTML5 Canvas**, and **C
 
 - **JavaScript:**  
   Core game logic, animations, and interactivity.
-
-- **GSAP:**  
-  For smooth and efficient animation of health bars and other elements.
 
 - **CSS:**  
   Basic styling for fonts and layout.
